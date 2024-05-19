@@ -1,0 +1,90 @@
+gp = {'O': 10, 'A': 9, 'B': 8, 'C': 7, 'D': 6, 'U': 0}
+
+stds = [
+    {"n": "Dharsini", "r": 1234, "g": ['O', 'A', 'B', 'C', 'D']},
+    {"n": "Shivani", "r": 5678, "g": ['O', 'O', 'A', 'A', 'B']},
+    {"n": "Deeks", "r": 9101, "g": ['U', 'A', 'B', 'C', 'D']},
+    {"n": "Dharshana", "r": 1121, "g": ['O', 'A', 'A', 'B', 'B']},
+    {"n": "Dhinesha", "r": 3141, "g": ['A', 'A', 'B', 'C', 'D']}
+]
+
+def crt_r(f):
+    with open(f, 'w') as f:
+        for s in stds:
+            t = sum(gp[g] for g in s['g'])
+            p = (t / (5 * 10)) * 100
+            f.write(f"{s['n']},{s['r']},{','.join(s['g'])},{t},{p:.2f}\n")
+
+def r_r(f):
+    with open(f, 'r') as f:
+        c = f.read()
+        print(c)
+
+def a_r(i_f, o_f):
+    with open(i_f, 'r') as i, open(o_f, 'w') as o:
+        g = {
+            '90% and above': [],
+            '80% to 89.99%': [],
+            '70% to 79.99%': [],
+            'below 70%': [],
+            'arrear': []
+        }
+        
+        for line in i:
+            n, rn, *gds, t, p = line.strip().split(',')
+            p = float(p)
+            if 'U' in gds:
+                g['arrear'].append(n)
+            elif p >= 90:
+                g['90% and above'].append(n)
+            elif p >= 80:
+                g['80% to 89.99%'].append(n)
+            elif p >= 70:
+                g['70% to 79.99%'].append(n)
+            else:
+                g['below 70%'].append(n)
+        
+        for cat, studs in g.items():
+            o.write(f"{cat}:\n")
+            if studs:
+                o.write("\n".join(studs) + "\n")
+            else:
+                o.write("None\n")
+            o.write("\n")
+
+rf = 'result.txt'
+af = 'analysis.txt'
+
+crt_r(rf)
+print("Result File Content:")
+r_r(rf)
+a_r(rf, af)
+print("\nAnalysis File Content:")
+r_r(af)
+
+
+output
+Result File Content:
+Dharsini,1234,O,A,B,C,D,40,80.00
+Shivani,5678,O,O,A,A,B,46,92.00
+Deeks,9101,U,A,B,C,D,30,60.00
+Dharshana,1121,O,A,A,B,B,45,90.00
+Dhinesha,3141,A,A,B,C,D,39,78.00
+
+Analysis File Content:
+90% and above:
+Shivani
+Dharshana
+
+80% to 89.99%:
+Dharsini
+
+70% to 79.99%:
+Dhinesha
+
+below 70%:
+None
+
+arrear:
+Deeks
+
